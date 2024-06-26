@@ -143,8 +143,8 @@ class DoubleLinkedList {
     }
 }
 
-var DLI = new DoubleLinkedList();
-DLI.push(10);
-DLI.push(20);
-DLI.push(30);
+// var DLI = new DoubleLinkedList();
+// DLI.push(10);
+// DLI.push(20);
+// DLI.push(30);
 // console.log(DLI);
