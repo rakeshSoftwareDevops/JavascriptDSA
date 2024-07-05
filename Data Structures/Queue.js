@@ -14,7 +14,7 @@ class Queue {
 
     enqueue(val) {
         var newNode = new Node(val);
-        if(!this.first) {
+        if (!this.first) {
             this.first = newNode;
             this.last = newNode;
         } else {
@@ -26,13 +26,14 @@ class Queue {
     }
 
     dequeue() {
-        if(!this.first) return null;
+        if (!this.first) return null;
         var temp = this.first;
-        if(this.first === this.last) {
+        if (this.first === this.last) {
             this.last = null;
         }
         this.first = this.first.next;
         this.size--;
-        return temp.value;
+        temp.next = null; // Optional: Clean up the detached node
+        return temp.data; // Corrected to return `data` instead of `value`
     }
 }

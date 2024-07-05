@@ -6,53 +6,28 @@ class Node {
     }
 }
 
-class binarysearchtree {
+class BinarySearchTree {
     constructor() {
         this.root = null;
     }
 
     insert(data) {
-        var new_node = new Node(data);
-        if(!this.root) {
-            this.root = new_node;
-        } else {
-            var current_node = this.root;
-            while(current_node.left !== null || current_node.right !== null) {
-                if(data > current_node.data) {
-                    current_node = current_node.right;
-                }
-                if(data < current_node.data) {
-                    current_node = current_node.left;
-                }
-            }
-            if(new_node.data < current_node.data) {
-                current_node.left = new_node;
-            } if(new_node.data > current_node.data) {
-                current_node.right = new_node;
-            }
-        }
-        
-    } 
-
-    insertToTree(value) {
-        var newNode = new Node(value);
-        if(this.root === null) {
+        var newNode = new Node(data);
+        if (this.root === null) {
             this.root = newNode;
-            return this;
         } else {
             var current = this.root;
-            while(true) {
-                if(value == current.value) return undefined;
-                if(value < current.value){
-                    if(current.left === null) {
+            while (true) {
+                if (data === current.data) return undefined; // Handle duplicate values
+                if (data < current.data) {
+                    if (current.left === null) {
                         current.left = newNode;
                         return this;
                     } else {
                         current = current.left;
                     }
-                    
-                } else if(value > current.value){
-                    if(current.right === null) {
+                } else if (data > current.data) {
+                    if (current.right === null) {
                         current.right = newNode;
                         return this;
                     } else {
@@ -62,24 +37,34 @@ class binarysearchtree {
             }
         }
     }
-    
+
     contains(value) {
-        if(this.root === null) return false;
+        if (this.root === null) return false;
         var current = this.root,
             found = false;
-        while(current && !found) {
-            if(value < current.value) {
+        while (current && !found) {
+            if (value < current.data) {
                 current = current.left;
-            } else if(value > current.value) {
+            } else if (value > current.data) {
                 current = current.right;
             } else {
                 found = true;
             }
-            if(!found) return undefined;
-            return current;
-        }  
-     }
-       
-
-    
+        }
+        return found;
+    }
 }
+
+// Example usage:
+let bst = new BinarySearchTree();
+bst.insert(44);
+bst.insert(57);
+bst.insert(40);
+bst.insert(31);
+bst.insert(45);
+bst.insert(65);
+bst.insert(58);
+bst.insert(70);
+console.log("BST contains 45:", bst.contains(45)); // true
+console.log("BST contains 50:", bst.contains(50)); // false
+console.log("Binary Search Tree:", bst);

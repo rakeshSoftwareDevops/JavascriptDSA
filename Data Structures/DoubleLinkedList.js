@@ -15,7 +15,7 @@ class DoubleLinkedList {
 
     push(val) {
         var newNode = new Node(val);
-        if(!this.head) {
+        if (!this.head) {
             this.head = newNode;
             this.tail = newNode;
         } else {
@@ -28,12 +28,12 @@ class DoubleLinkedList {
     }
 
     pop() {
-        if(!this.length) return undefined;
-        else if(this.length == 1) {
+        if (!this.head) return undefined;
+        var poppedNode = this.tail;
+        if (this.length === 1) {
             this.head = null;
             this.tail = null;
         } else {
-            var poppedNode = this.tail;
             this.tail = poppedNode.prev;
             this.tail.next = null;
             poppedNode.prev = null;
@@ -43,24 +43,23 @@ class DoubleLinkedList {
     }
 
     shift() {
-        if(!this.length) return undefined;
-         else if(this.length == 1) {
+        if (!this.head) return undefined;
+        var oldHead = this.head;
+        if (this.length === 1) {
             this.head = null;
             this.tail = null;
         } else {
-            var poppedNode = this.head;
-            this.head = poppedNode.next;
+            this.head = oldHead.next;
             this.head.prev = null;
-            poppedNode.next = null;
+            oldHead.next = null;
         }
         this.length--;
-        return poppedNode;
+        return oldHead;
     }
 
     unshift(val) {
-        if(!val) return undefined;
         var newNode = new Node(val);
-        if(!this.head) {
+        if (!this.head) {
             this.head = newNode;
             this.tail = newNode;
         } else {
@@ -73,78 +72,77 @@ class DoubleLinkedList {
     }
 
     get(position) {
-        if(!this.head) return undefined;
-        else if(position > this.length) return undefined;
-        else {
-            var count = 1;
-            var current = this.head;
-            while(count !== position) {
+        if (position < 0 || position >= this.length) return undefined;
+        var current;
+        var count;
+        if (position <= this.length / 2) {
+            current = this.head;
+            count = 0;
+            while (count !== position) {
                 current = current.next;
                 count++;
             }
-            return current;
+        } else {
+            current = this.tail;
+            count = this.length - 1;
+            while (count !== position) {
+                current = current.prev;
+                count--;
+            }
         }
+        return current;
     }
 
-    // We can also use get method to do the performance enhancement
-    set(position , value) {
-        if(!this.head || !value || !position) return undefined;
-        else if(position > this.length) return undefined;
-        else {
-            var count = 1;
-            var current = this.head;
-            while(count !== position) {
-                current = current.next;
-                count++;
-            }
-            current.value = value;
-            return current;
+    set(position, value) {
+        var node = this.get(position);
+        if (node) {
+            node.value = value;
+            return node;
         }
+        return undefined;
     }
 
     insertAtPosition(position, value) {
-        if(!this.head || !value || !position) return undefined;
-        else if(position > this.length) return undefined;
-        else if(position == 1) {
-            return this.unshift(value);
-        } else if(position == this.length) {
-            return this.push(value);
-        } else {
-            var newNode = new Node(value);
-            var previousNode = this.get(position-1);
-            var nextNode = this.get(position);
-            newNode.prev = previousNode;
-            newNode.next = nextNode;
-            nextNode.prev = newNode;
-            previousNode.next = newNode;
-        }
+        if (position < 0 || position > this.length) return undefined;
+        if (position === 0) return this.unshift(value);
+        if (position === this.length) return this.push(value);
+
+        var newNode = new Node(value);
+        var beforeNode = this.get(position - 1);
+        var afterNode = beforeNode.next;
+
+        beforeNode.next = newNode;
+        newNode.prev = beforeNode;
+        newNode.next = afterNode;
+        afterNode.prev = newNode;
+
         this.length++;
         return this;
     }
 
     removeAtPosition(position) {
-        if(!this.head || !position) return undefined;
-        else if(position > this.length) return undefined;
-        else if(position == 1) {
-            return this.shift();
-        } else if(position == this.length) {
-            return this.pop();
-        } else {
-            var previousNode = this.get(position-1);
-            var nextNode = this.get(position+1);
-            var currentNode = this.get(position);
-            previousNode.next = nextNode;
-            nextNode.prev = previousNode;
-            currentNode.prev = null;
-            currentNode.next = null;
-        }
+        if (position < 0 || position >= this.length) return undefined;
+        if (position === 0) return this.shift();
+        if (position === this.length - 1) return this.pop();
+
+        var removedNode = this.get(position);
+        var beforeNode = removedNode.prev;
+        var afterNode = removedNode.next;
+
+        beforeNode.next = afterNode;
+        afterNode.prev = beforeNode;
+
+        removedNode.next = null;
+        removedNode.prev = null;
+
         this.length--;
-        return this;
+        return removedNode;
     }
 }
 
-// var DLI = new DoubleLinkedList();
-// DLI.push(10);
-// DLI.push(20);
-// DLI.push(30);
-// console.log(DLI);
+// Example usage:
+var DLI = new DoubleLinkedList();
+DLI.push(10);
+DLI.push(20);
+DLI.push(30);
+console.log(DLI);
